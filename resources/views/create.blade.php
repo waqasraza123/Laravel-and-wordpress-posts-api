@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
+
+@if($errors->has())
+      <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <h4><i class="icon fa fa-ban"></i> Alert!</h4>                  
+          @foreach ($errors->all() as $error)  
+          {{ $error }}</br>                      
+          @endforeach
+      </div>
+    @endif  
+
+
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
@@ -18,6 +30,7 @@
                         
                     </div>
                     
+                    
                     <div class="form-group">
                         
                       {!! Form::label('image', 'Image') !!}
@@ -25,12 +38,6 @@
                         
                     </div>
                     
-                    <div class="form-group">
-                        
-                      {!! Form::label('content', 'Content') !!}
-                      {!! Form::text('content', '', ['class' => 'form-control']) !!}
-                        
-                    </div>
                     
                     <div class="form-group">
                         
@@ -51,12 +58,21 @@
                     <div class="form-group">
                         
                       {!! Form::label('tags', 'Tags') !!}
-                      {!! Form::text('name', '', ['class' => 'form-control']) !!}
+                      {!! Form::text('tags', '', ['class' => 'form-control']) !!}
                         
                     </div>
                     
+                    
+                    <div class="form-group">
+                        
+                      {!! Form::label('content', 'Content') !!}
+                      {!! Form::textarea('content', '', ['class' => 'form-control']) !!}
+                        
+                    </div>
+                    
+                    
 
-                    <button class="btn btn-success" type="submit">Submit!</button>
+                    <button class="btn btn-success btn-lg btn-block" type="submit">Submit!</button>
                     
                     
                     {!! Form::close() !!}

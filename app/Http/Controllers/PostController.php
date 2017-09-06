@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\Post;
 
 class PostController extends Controller
 {
@@ -36,7 +38,31 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this -> validate ($request, array(
+        
+            'name'=>'required|max:255',
+            'image'=>'required',
+            'content'=>'required',
+            'category'=>'required',
+            'tags'=>'required',
+            'status'=>'required'
+            ));
+            
+            
+            $post = new Post;
+        
+            $post->name = $request['name'];
+            $post->image = $request['image'];   
+            $post->content = $request['content'];
+            $post->category = $request['category'];
+            $post->tags = $request['tags'];
+            $post->status = $request['status'];
+            $post -> save();
+        
+        
+            return view ('success');
+            
+        
     }
 
     /**
@@ -45,6 +71,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
+    
+    
     public function show($id)
     {
         //
