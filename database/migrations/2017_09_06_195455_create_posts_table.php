@@ -19,7 +19,8 @@ class CreatePostsTable extends Migration
             $table->text('content')->nullable();
             $table->string('category')->nullable();
             $table->text('tags')->nullable();
-            $table->string('status')->nullable(); 
+            $table->string('status')->nullable();
+            $table->string('publish_date')->nullable(); 
             $table->timestamps();
         });
     }

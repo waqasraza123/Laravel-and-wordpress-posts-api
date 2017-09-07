@@ -45,7 +45,8 @@ class PostController extends Controller
             'content'=>'required',
             'category'=>'required',
             'tags'=>'required',
-            'status'=>'required'
+            'status'=>'required',
+            'publish_date'=>'required'
             ));
             
             
@@ -57,6 +58,7 @@ class PostController extends Controller
             $post->category = $request['category'];
             $post->tags = $request['tags'];
             $post->status = $request['status'];
+            $post->publish_date = $request['publish_date'];
             $post -> save();
         
         

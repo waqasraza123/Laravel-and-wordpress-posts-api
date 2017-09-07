@@ -50,10 +50,17 @@
                         
                       {!! Form::label('status', 'Status') !!}
                       {!! Form::select('status', array('Publish' => 'Publish','Draft'=>'Draft'), 'Publish', ['class'=>'form-control', 'id'=>'status']) !!}    
-                      
-                        
                         
                     </div>
+                      
+                    <div class="form-group">
+                        
+                      {!! Form::label('publish_date', 'Publish Date') !!}
+                      {!! Form::text('publish_date', '', array('id' => 'datepicker','class' => 'form-control' )) !!}
+                        
+                    </div>    
+                        
+                    
                     
                     <div class="form-group">
                         
