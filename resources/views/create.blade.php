@@ -65,7 +65,7 @@
                     <div class="form-group">
                         
                       {!! Form::label('tags', 'Tags') !!}
-                      {!! Form::text('tags', '', ['class' => 'form-control']) !!}
+                      {!! Form::text('tags', '', array('class' => 'form-control' )) !!}
                         
                     </div>
                     
@@ -73,7 +73,7 @@
                     <div class="form-group">
                         
                       {!! Form::label('content', 'Content') !!}
-                      {!! Form::textarea('content', '', ['class' => 'form-control']) !!}
+                      {!! Form::textarea('content', '', array('id' => 'summernote','class' => 'form-control' )) !!}
                         
                     </div>
                     
