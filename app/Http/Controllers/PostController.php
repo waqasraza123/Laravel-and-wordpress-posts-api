@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Post;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -27,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $tags = Post::existingTags()->pluck('name');
+        $tags = DB::table('tagging_tags')->pluck('name', 'name');
         return view('create', compact('tags'));
     }
 
@@ -64,7 +65,7 @@ class PostController extends Controller
         
 
             // Now add tags
-            $post->tag(explode(',', $request->tags));
+            $post->tag($request->input('tags'));
         
             return view ('success');
             

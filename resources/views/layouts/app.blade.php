@@ -18,8 +18,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.css" rel="stylesheet">
-
-      
+    <link href="{{asset('select2/select2.css')}}" rel="stylesheet">
 
     <style>
         body {
@@ -75,24 +74,7 @@
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.7/summernote.js"></script>
-    
-      <script>
-      $( function() {
-        $( "#datepicker" ).datepicker();
-      } );
-      </script>
-    
-    <script>
-        
-        $('#summernote').summernote({
-          height: 300,                 // set editor height
-          minHeight: null,             // set minimum height of editor
-          maxHeight: null,             // set maximum height of editor
-          focus: true                  // set focus to editable area after initializing summernote
-        });
-        
-        
-  </script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="{{asset('js/custom.js')}}"></script>
 </body>
 </html>
