@@ -27,7 +27,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view ('create');
+        $tags = Post::existingTags()->pluck('name');
+        return view('create', compact('tags'));
     }
 
     /**
@@ -61,6 +62,9 @@ class PostController extends Controller
             $post->publish_date = $request['publish_date'];
             $post -> save();
         
+
+            // Now add tags
+            $post->tag(explode(',', $request->tags));
         
             return view ('success');
             

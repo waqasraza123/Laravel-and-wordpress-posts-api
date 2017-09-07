@@ -65,7 +65,15 @@
                     <div class="form-group">
                         
                       {!! Form::label('tags', 'Tags') !!}
-                      {!! Form::text('tags', '', array('class' => 'form-control' )) !!}
+                      {!! Form::text('tags', '', array('name' => 'tags','id' => 'tags','class' => 'form-control' )) !!}
+                        
+                       <script>
+                            var tags = [
+                                @foreach ($tags as $tag)
+                                {tag: "{{$tag}}" },
+                                @endforeach
+                            ];
+                            </script>
                         
                     </div>
                     
