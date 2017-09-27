@@ -280,7 +280,7 @@
 	    |
 	    */
 	    public function hook_after_add($id) {
-	        //Your code here
+			$this->hook_after_edit($id);
 
 	    }
 
@@ -360,7 +360,7 @@
 		}
 
 		public function addImage($post, $method, $url, $site){
-			
+
 		}
 
 		public function createRequest($post, $method, $url, $site){
