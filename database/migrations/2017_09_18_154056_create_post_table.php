@@ -21,6 +21,7 @@ class CreatePostTable extends Migration
             $table->text('categories');
             $table->text('tags');
             $table->string('status', 10);
+            $table->timestamp('publish_at');
             $table->timestamps();
         });
     }

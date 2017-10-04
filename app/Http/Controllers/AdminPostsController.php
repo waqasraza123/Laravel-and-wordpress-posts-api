@@ -38,6 +38,7 @@
 			$this->col[] = ["label"=>"Categories","name"=>"categories"];
 			$this->col[] = ["label"=>"Tags","name"=>"tags"];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
+			$this->col[] = ["label"=>"Publish At (GMT)","name"=>"publish_at"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -47,7 +48,7 @@
 			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'publish|Publish;draft|Draft'];
 			$this->form[] = ['label'=>'Categories','name'=>'categories','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','datatable'=>'sites,name'];
 			$this->form[] = ['label'=>'Tags','name'=>'tags','type'=>'custom','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','html'=>'<input type="text" name="tags" id="tags" class="form-control" data-role="tagsinput" />'];
-			$this->form[] = ['label'=>'Date','name'=>'updated_at','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Publish At (GMT)','name'=>'publish_at','type'=>'datetime','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Content','name'=>'content','type'=>'wysiwyg','validation'=>'required|string|min:5|max:10000','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
@@ -56,9 +57,9 @@
 			//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Image','name'=>'image','type'=>'upload','validation'=>'required|image|max:20480','width'=>'col-sm-10','help'=>'File types support : JPG, JPEG, PNG, GIF, BMP'];
 			//$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'publish|Publish;draft|Draft'];
-			//$this->form[] = ['label'=>'Categories','name'=>'categories','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','dataquery'=>'select id as value, name as label from sites'];
+			//$this->form[] = ['label'=>'Categories','name'=>'categories','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','datatable'=>'sites,name'];
 			//$this->form[] = ['label'=>'Tags','name'=>'tags','type'=>'custom','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','html'=>'<input type="text" name="tags" id="tags" class="form-control" data-role="tagsinput" />'];
-			//$this->form[] = ['label'=>'Date','name'=>'updated_at','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Publish At','name'=>'publish_at','type'=>'datetime','validation'=>'required','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Content','name'=>'content','type'=>'wysiwyg','validation'=>'required|string|min:5|max:10000','width'=>'col-sm-10'];
 			# OLD END FORM
 
@@ -313,6 +314,7 @@
 			$data["status"] = "publish";
 			$data["title"] = $post->name;
 			$data["content"] = $post->content;
+			$data["date_gmt"] = $post->publish_at;
 			// $data["tags"] = explode(",", $post->tags);
 
 			$categories = explode(";", $post->categories);
