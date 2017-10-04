@@ -1,18 +1,24 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::resource('subscribe', 'SubscriberController');
+
+Route::get('/impression', 'ImpressionController@impression');
+
+
+Route::get('/test', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb) {
+    try {
+        $response = $fb->get('/me?fields=id,name,email', 'user-access-token');
+    } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+        dd($e->getMessage());
+    }
+
+    $userNode = $response->getGraphUser();
+    printf('Hello, %s!', $userNode->getName());
+});
+

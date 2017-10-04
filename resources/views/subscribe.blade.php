@@ -21,6 +21,19 @@
             margin: 0;
         }
 
+        #mydiv {
+            height:200px;
+            width:400px;
+            background: #323232;
+            color:#222;
+            text-shadow: 0px 1px 2px #555;
+            display:none;
+            text-align:center;
+            line-height:4em;
+            font-size:3em;
+        }
+
+
         .full-height {
             height: 100vh;
         }
@@ -63,6 +76,17 @@
             margin-bottom: 30px;
         }
     </style>
+
+    <script>
+        $(document).ready(function(){
+            $("button").click(function(){
+                $("p").toggle();
+            });
+        });
+    </script>
+
+
+
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -108,7 +132,15 @@
 
         </form>
 
+        <button class="one">Image</button>
+
+        <div id="mydiv">Yes this is the image</div>
+
+
     </div>
 </div>
+
+
+
 </body>
 </html>
