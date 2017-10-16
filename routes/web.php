@@ -11,6 +11,11 @@ Route::resource('subscribe', 'SubscriberController');
 Route::get('/impression', 'ImpressionController@impression');
 
 
+Route::get('/doug', function(){
+    return view('subscribe.doug');
+});
+
+
 Route::get('/test', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb) {
     try {
         $response = $fb->get('/me?fields=id,name,email', 'user-access-token');
@@ -20,5 +25,6 @@ Route::get('/test', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb) {
 
     $userNode = $response->getGraphUser();
     printf('Hello, %s!', $userNode->getName());
+
 });
 

@@ -77,14 +77,6 @@
         }
     </style>
 
-    <script>
-        $(document).ready(function(){
-            $("button").click(function(){
-                $("p").toggle();
-            });
-        });
-    </script>
-
 
 
 </head>
@@ -131,10 +123,6 @@
             </div>
 
         </form>
-
-        <button class="one">Image</button>
-
-        <div id="mydiv">Yes this is the image</div>
 
 
     </div>
