@@ -24,6 +24,11 @@ Route::get('/admin/stats', 'PagesController@stats');
 Route::get('/admin/details', 'PagesController@details')
     ->name('stats.details');
 
+Route::get('/doug', function(){
+    return view('subscribe.doug');
+});
+
+
 Route::get('/test', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb) {
     try {
         $response = $fb->get('/me?fields=id,name,email', 'user-access-token');
