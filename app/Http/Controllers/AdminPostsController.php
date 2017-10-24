@@ -24,7 +24,7 @@
 			$this->button_edit = true;
 			$this->button_delete = true;
 			$this->button_detail = true;
-			$this->button_show = true;
+			$this->button_show = false;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
@@ -46,8 +46,9 @@
 			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Image','name'=>'image','type'=>'upload','validation'=>'required|image|max:20480','width'=>'col-sm-10','help'=>'File types support : JPG, JPEG, PNG, GIF, BMP'];
 			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'publish|Publish;draft|Draft'];
-			$this->form[] = ['label'=>'Categories','name'=>'categories','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','datatable'=>'sites,name'];
-			$this->form[] = ['label'=>'Tags','name'=>'tags','type'=>'custom','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','html'=>'<input type="text" name="tags" id="tags" class="form-control" data-role="tagsinput" />'];
+			$this->form[] = ['label'=>'Publish To','name'=>'categories','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','datatable'=>'sites,name'];
+            $this->form[] = ['label'=>'Category','name'=>'tags','type'=>'checkbox','validation'=>'required|min:1|max:5000','width'=>'col-sm-10','datatable'=>'topics,name'];
+//            $this->form[] = ['label'=>'Tags','name'=>'tags','type'=>'custom','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','html'=>'<input type="text" name="tags" id="tags" class="form-control" data-role="tagsinput" />'];
 			$this->form[] = ['label'=>'Publish At (GMT)','name'=>'publish_at','type'=>'datetime','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Content','name'=>'content','type'=>'wysiwyg','validation'=>'required|string|min:5|max:10000','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE

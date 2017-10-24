@@ -15,6 +15,12 @@ class SubscriberController extends Controller
         return view('subscribe', compact('topics'));
     }
 
+    public function doug()
+    {
+        $topics = Topic::all();
+        return view('subscribe', compact('topics'));
+    }
+
 
     public function create()
     {
