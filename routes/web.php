@@ -1,6 +1,10 @@
 <?php
 
-
+Route::get('/clear_cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    return "Cache Cleared!";
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,15 +34,7 @@ Route::get('/doug', function(){
 
 
 Route::get('/test', function(SammyK\LaravelFacebookSdk\LaravelFacebookSdk $fb) {
-    try {
-        $response = $fb->get('/me?fields=id,name,email', 'user-access-token');
-    } catch(\Facebook\Exceptions\FacebookSDKException $e) {
-        dd($e->getMessage());
-    }
-
-    $userNode = $response->getGraphUser();
-    printf('Hello, %s!', $userNode->getName());
-
+    echo \Carbon\Carbon::now()->format('d-m-Y');
 });
 
 Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'MediaController@dropzoneStore']);
@@ -46,3 +42,6 @@ Route::post('dropzone/store', ['as'=>'dropzone.store','uses'=>'MediaController@d
 
 Route::get('/events/go', 'PagesController@goEventAction')->name('events.go');
 Route::get('/events/pixel', 'PagesController@pixelAction')->name('events.pixel');
+
+Route::get('waqas', 'PostsHandlerController@uploadImage');
+Route::get('/posts', 'AdminPostsController@getWpPosts');

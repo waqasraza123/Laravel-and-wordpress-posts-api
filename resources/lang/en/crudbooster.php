@@ -87,17 +87,17 @@ return [
 
 
     'action_show_data'       => 'Show Data',
-    'action_add_data'        => 'Add Data',
+    'action_add_data'        => 'New',
     'action_delete_selected' => 'Delete Selected',
 
     'action_label'       => 'Action',
-    'action_detail_data' => 'Detail Data',
-    'action_edit_data'   => 'Edit Data',
+    'action_detail_data' => 'Detail',
+    'action_edit_data'   => 'Edit',
     'action_delete_data' => 'Delete',
 
 
     'button_cancel'          => 'Cancel',
-    'button_add'             => 'Add Data',
+    'button_add'             => 'New',
     'button_edit'            => 'Edit Data',
     'button_back'            => 'Back',
     'button_save'            => 'Save',

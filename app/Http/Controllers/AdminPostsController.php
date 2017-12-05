@@ -1,12 +1,18 @@
 <?php namespace App\Http\Controllers;
 
-	use Session;
-	use Request;
+	use App\Post;
+    use Carbon\Carbon;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Input;
+    use Session;
+//	use Request;
 	use DB;
 	use CRUDBooster;
 
 	use GuzzleHttp\Exception\GuzzleException;
 	use GuzzleHttp\Client;
+    use App\Http\HttpRequests;
+
 
 	class AdminPostsController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -35,8 +41,6 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Name","name"=>"name"];
 			$this->col[] = ["label"=>"Image","name"=>"image","image"=>true];
-			$this->col[] = ["label"=>"Categories","name"=>"categories"];
-			$this->col[] = ["label"=>"Tags","name"=>"tags"];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
 			$this->col[] = ["label"=>"Publish At (GMT)","name"=>"publish_at"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
@@ -306,26 +310,31 @@
 	    | @id       = current id
 	    |
 	    */
-	    public function hook_after_edit($id) {
-	        $post = DB::table('posts')->where('id',$id)->first();
-			if($post->status != "publish")
-				return;
 
-			$data = array();
+
+
+	    public function hook_after_edi2t($id) {
+            $post = DB::table('posts')->where('id',$id)->first();
+
+            //return if the post status is not publish
+            if($post->status != "publish")
+                return;
+
+            $postAuthHandler = new PostsAuthController();
+            $postHandler = new PostsHandlerController();
+            $sessionId = null;
+            $image  = DB::table('posts')->where('id',$id)->pluck('image');
+
+            $data = array();
 			$data["status"] = "publish";
 			$data["title"] = $post->name;
 			$data["content"] = $post->content;
 			$data["date_gmt"] = $post->publish_at;
+			$data["source_url"] = $post->image;
 			// $data["tags"] = explode(",", $post->tags);
 
+            //categories are websites
 			$categories = explode(";", $post->categories);
-
-			foreach($categories as $categorie){
-				$site = DB::table('sites')->where('name',$categorie)->first();
-				$site = json_decode(json_encode($site), true);
-
-				$this->createPost($data, $site);
-			}
 	    }
 
 	    /*
@@ -353,62 +362,86 @@
 	    }
 
 
+        /**
+         *
+         * handles the post save request
+         * overrides the crudbooster method
+         * for saving the post
+         *
+         */
+        public function postAddSave() {
+            $destinationPath = '\uploads';
+	        //save the image
+            $originalNameWithExtention = Input::file('image')->getClientOriginalName();
+            $fileName = Carbon::now()->format('d-m-Y').str_replace(" ", "_", strtolower($originalNameWithExtention)); // renameing image
+            Input::file('image')->move(public_path() . $destinationPath, $fileName);
+            $post = new Post();
+            $post->name = $_POST['name'];
+            $post->image = $fileName;
+            $post->status = $_POST['status'];
+            $post->content = $_POST['content'];
+            $post->publish_at = $_POST['publish_at'];
 
-		public function createPost($post, $site){
-			$client = new Client();
-			$res = $client->request("POST", $site["url"] . "/wp-json/wp/v2/posts", [
-				'form_params' => $this->createRequest($post,"POST",$site["url"] . "/wp-json/wp/v2/posts",$site)
-			]);
-			return $res->getStatusCode();
-		}
+            $post->save();
+            $post->sites()->sync($_POST['categories']);
+            $post->topics()->sync($_POST['tags']);
 
-		public function addImage($post, $method, $url, $site){
+            if($post->status == 'draft')
+                return;
 
-		}
+            $tags = ($post->topics()->pluck('name')->toArray());
+            $tags = implode (", ", $tags);
+            $categories = $post->sites;
+            $postAuthHandler = new PostsAuthController();
+            $postHandler = new PostsHandlerController();
+            $sessionId = null;
 
-		public function createRequest($post, $method, $url, $site){
-			$time = time();
-			$nonce = str_random(6);
-			$output = [
-				"oauth_consumer_key" => $site["oauth_consumer_key"],
-				"oauth_nonce" => $nonce,
-				"oauth_signature_method" => $site["oauth_signature_method"],
-				"oauth_timestamp" => $time,
-				"oauth_token" => $site["oauth_token"],
-				"oauth_version" => $site["oauth_version"],
-			];
-			$output = array_merge($output,$post);
-			ksort($output);
+            foreach($categories as $site){
+                $sessionId = $postAuthHandler->login($site->username, $site->password, $site->url);
+                $imageId = $postHandler->uploadImage($sessionId, 'uploads/' . $post->image, $site->url);
+                $postHandler->createPost($sessionId, $post->name, $post->content, $imageId, $post->publish_at, $post->status, $tags, $site->url);
+            }
 
-			$params = ""; $count = 1;
-			foreach ($output as $key => $value){
-				$params = $params . rawurlencode($key) . '=' . rawurlencode($value);
-				if($count++ != count($output))
-					$params = $params . "&";
-			}
+            return redirect()->back()->withSuccess("Post Inserted Successfully");
+        }
 
-			$base_string = $method . "&" . rawurlencode($url) . "&" . rawurlencode($params);
+        public function postEditSave($id){
 
-			$signature_key = urlencode( $site["oauth_consumer_secret"] ) . '&' . urlencode( $site["oauth_token_secret"] );
+            $post = Post::find($id);
+            $post->name = $_POST['name'];
+            $post->status = $_POST['status'];
+            $post->content = $_POST['content'];
+            $post->publish_at = $_POST['publish_at'];
 
-			$hash_algorithm;
-			switch ($site['oauth_signature_method']) {
-				case 'HMAC-SHA1':
-					$hash_algorithm = 'sha1';
-					break;
+            if(!empty(Input::file('image'))){
+                $destinationPath = '\uploads';
+                //save the image
+                $originalNameWithExtention = Input::file('image')->getClientOriginalName();
+                $fileName = Carbon::now()->format('d-m-Y').str_replace(" ", "_", strtolower($originalNameWithExtention)); // renameing image
+                Input::file('image')->move(public_path() . $destinationPath, $fileName);
+                $post->image = $fileName;
+            }
 
-				case 'HMAC-SHA256':
-					$hash_algorithm = 'sha256';
-					break;
-			}
+            $post->save();
+            $post->sites()->sync($_POST['categories']);
+            $post->topics()->sync($_POST['tags']);
 
-			$out = hash_hmac( $hash_algorithm, $base_string, $signature_key, TRUE );
-			$signature = base64_encode( $out );
+            if($post->status == 'draft')
+                return redirect('/admin/posts');
 
-			$output["oauth_signature"] = $signature;
+            $tags = ($post->topics()->pluck('name')->toArray());
+            $tags = implode (", ", $tags);
+            $categories = $post->sites;
+            $postAuthHandler = new PostsAuthController();
+            $postHandler = new PostsHandlerController();
+            $sessionId = null;
 
-			return $output;
-		}
+            foreach($categories as $site){
+                $sessionId = $postAuthHandler->login($site->username, $site->password, $site->url);
+                $imageId = $postHandler->uploadImage($sessionId, 'uploads/' . $post->image, $site->url);
+                $postHandler->createPost($sessionId, $post->name, $post->content, $imageId, $post->publish_at, $post->status, $tags, $site->url);
+            }
 
-
-	}
+            return redirect('/admin/posts')->withSuccess("Post Inserted Successfully");
+        }
+}

@@ -10,4 +10,8 @@ class Post extends Model
     {
         return $this->belongsToMany(Topic::class,  'post_topic', 'post_id', 'topic_id');
     }
+
+    public function sites(){
+        return $this->belongsToMany(Site::class, 'post_site', 'post_id', 'site_id');
+    }
 }
